@@ -1,22 +1,21 @@
-#include <SFML/Graphics.hpp>
+#include "Game.h"
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(1364, 664), "Basic SFML App");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    sf::RenderWindow window(sf::VideoMode(1364, 664), "SFML C++ Periode 4 Racer");
+    Game* console = new Game(&window);
 
+    //Game is Running
     while (window.isOpen())
     {
         sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
+        while (window.pollEvent(event)) {
+            console->CheckQuitInput(&event);
         }
 
         window.clear();
-        window.draw(shape);
+        console->Update();
+        console->Draw();
         window.display();
     }
 
