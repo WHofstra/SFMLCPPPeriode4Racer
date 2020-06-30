@@ -2,22 +2,13 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(1364, 664), "SFML C++ Periode 4 Racer");
-    Game* console = new Game(&window);
+	//srand(time(static_cast<unsigned>(0)));
 
-    //Game is Running
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            console->CheckQuitInput(&event);
-        }
+	//als dit niet weinig in C is, dan weet ik het ook niet meer :D
+	Game game;
 
-        window.clear();
-        console->Update();
-        console->Draw();
-        window.display();
-    }
+	game.run();
 
-    return 0;
+	//End of application
+	return 0;
 }

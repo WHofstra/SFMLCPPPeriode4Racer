@@ -1,21 +1,49 @@
 #pragma once
-#include "VisualObject.h"
+
+#include<map>
+#include"Player.h"
 
 class Game
 {
-	public:
-		Game(sf::RenderWindow* aWindow);
-		~Game();
+private:
+	//Window
+	sf::RenderWindow* window;
 
-		void FindTexture(sf::Texture* aTexture, std::string filePath);
-		void CheckQuitInput(sf::Event* anEvent);
+	//Resources map, omdat je hier makkelijk dingen in en uit kan halen met een eigen key, zonder dat het veel geheugen steelt
+	std::map<std::string, sf::Texture*> textures;
 
-		void Update();
-		void Draw();
+	//GUI
+	sf::Font font;
+	sf::Text pointText;
 
-	private:
-		sf::RenderWindow* window;
-		sf::Texture spriteMap;
-		sf::Texture mapTerrainTexture;
+	//Player
+	Player* player;
+
+	//Enemies
+	float spawnTimer;
+	float spawnTimerMax;
+
+	//Private functions
+	void initWindow();
+	void initTextures();
+	void initGUI();
+
+	void initPlayer();
+	void initEnemies();
+
+public:
+	Game();
+	virtual ~Game();
+
+	//Functions
+	void run();
+
+	//de reden dat er zoveel update zijn is, omdat er anders een hele grootte onoverzichtelijke spagetti onstaat.
+	void updatePollEvents();
+	void updateInput();
+	void updateGUI();
+	void update();
+	void renderGUI();
+	void render();
 };
 
