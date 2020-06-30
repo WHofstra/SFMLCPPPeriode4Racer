@@ -19,8 +19,9 @@ class VisualObject
 		VisualObject(sf::Vector2f aPosition, sf::Texture* aTexture, sf::IntRect spriteBounds, float aSpeed);
 		~VisualObject();
 
+		virtual void SetSprite(sf::IntRect spriteBounds);
+
 		void SetPosition(sf::Vector2f sPosition);
-		void SetSprite(sf::IntRect spriteBounds);
 		void SetSpeed(float aSpeed);
 };
 

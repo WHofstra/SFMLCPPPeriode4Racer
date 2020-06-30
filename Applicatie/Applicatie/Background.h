@@ -1,13 +1,21 @@
 #pragma once
+#include <iostream>
 #include "VisualObject.h"
 
-class Background : VisualObject
+class Background : public VisualObject
 {
-	private:
-
+	protected:
+		int spriteHeight;
+		sf::Vector2f spritePosition;
 
 	public:
-		Background();
+		Background(sf::Vector2f aPosition, sf::Texture* aTexture, sf::IntRect spriteBounds, float aSpeed);
 		~Background();
+
+		void SetSprite(sf::IntRect spriteBounds, sf::Texture* aTexture, sf::Color aColor);
+		int GetTileHeight();
+
+		void Update();
+		void Render(sf::RenderWindow* aWindow);
 };
 

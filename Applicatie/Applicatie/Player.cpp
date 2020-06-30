@@ -15,6 +15,9 @@ void Player::InitTexture()
 	{
 		std::cout << "ERROR::PLAYER::InitTEXTURE::Could not load texture file." << "\n";
 	}
+	else {
+		texture->setSmooth(true);
+	}
 
 	//Eén gehele texture wordt al in de 'Game'-class geladen.
 	//Andere classes kunnen dan van deze texture hun sprites halen.

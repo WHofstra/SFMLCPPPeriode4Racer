@@ -17,6 +17,11 @@ void Game::InitTexture(sf::Texture* aTexture, std::string filePath)
 	}
 }
 
+void Game::InitBackground()
+{
+	background = new Background(sf::Vector2f(0.f, 0.f), &mapTexture, sf::IntRect(0, 0, 1364, 32), 3.5f);
+}
+
 //Instantieert de GUI. Zet de font gelijk aan het correcte font en krijgt ook gelijk de goeie kleur en lettergrootte.
 void Game::InitGUI(std::string filePath)
 {
@@ -32,10 +37,10 @@ void Game::InitGUI(std::string filePath)
 
 	//Point text
 	pointText.setFont(font);
-	pointText.setCharacterSize(32);
+	pointText.setCharacterSize(16);
 	pointText.setFillColor(sf::Color::White);
 	pointText.setString("test");
-	std::cout << "huts" << "\n";
+	//std::cout << "huts" << "\n";
 }
 
 //Maakt de speler aan
@@ -57,6 +62,8 @@ Game::Game()
 {
 	InitWindow();
 	InitTexture(&spriteSheet, "Textures/car.png");
+	InitTexture(&mapTexture, "Textures/Road.png");
+	InitBackground();
 	InitGUI("Fonts/retganon.ttf");
 	InitPlayer();
 }
@@ -65,6 +72,7 @@ Game::Game()
 Game::~Game()
 {
 	delete window;
+	delete background;
 	delete player;
 
 	//Delete textures
@@ -75,7 +83,7 @@ Game::~Game()
 }
 
 //Functions
-//Zorgt ervoor dat als de game open staat, alles geUpdate wordt.
+//Zorgt ervoor dat als de game open staat, alles geupdate wordt.
 void Game::Run()
 {
 	while (window->isOpen())
@@ -128,6 +136,7 @@ void Game::Update()
 
 	UpdateInput();
 
+	background->Update();
 	player->Update();
 
 	UpdateGUI();
@@ -145,6 +154,7 @@ void Game::Render()
 	
 	window->clear();
 
+	background->Render(window);
 	player->Render(*window);
 
 	RenderGUI();

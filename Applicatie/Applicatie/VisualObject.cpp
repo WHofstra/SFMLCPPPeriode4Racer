@@ -18,6 +18,7 @@ void VisualObject::SetPosition(sf::Vector2f sPosition)
 
 void VisualObject::SetSprite(sf::IntRect spriteBounds)
 {
+
 }
 
 void VisualObject::SetSpeed(float aSpeed)

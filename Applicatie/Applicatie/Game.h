@@ -1,7 +1,8 @@
 #pragma once
-
 #include<map>
-#include"Player.h"
+
+#include "Player.h"
+#include "Background.h"
 
 class Game
 {
@@ -11,6 +12,9 @@ private:
 
 	//Resources map, omdat je hier makkelijk dingen in en uit kan halen met een eigen key, zonder dat het veel geheugen steelt
 	std::map<std::string, sf::Texture*> textures;
+
+	//Background
+	Background* background;
 
 	//GUI
 	sf::Font font;
@@ -28,6 +32,7 @@ private:
 	//Private functions
 	void InitWindow();
 	void InitTexture(sf::Texture* aTexture, std::string filePath);
+	void InitBackground();
 	void InitGUI(std::string filePath);
 
 	void InitPlayer();
