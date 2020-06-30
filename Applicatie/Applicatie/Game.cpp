@@ -1,49 +1,144 @@
-#include <iostream>
 #include "Game.h"
 
-Game::Game(sf::RenderWindow* aWindow)
-    : window(aWindow)
+//Private functions
+//maakt de window aan en zet fps limit. ps en een leuk naampie
+void Game::initWindow()
 {
-    //Load Textures, These Files are Located in the 'Assets' Map
-    //FindTexture(&mapTerrainTexture, "Assets/Map.png");
-    //FindTexture(&spriteMap, "Assets/Sprites.png");
+	this->window = new sf::RenderWindow(sf::VideoMode(1364, 664), "Huts game: Shiet Shiet", sf::Style::Close | sf::Style::Titlebar);
+	this->window->setFramerateLimit(144);
+	this->window->setVerticalSyncEnabled(false);
 }
 
+
+
+
+//voegt een leuke texture toe aan de bullets
+void Game::initTextures()
+{
+
+}
+
+//instantieert de GUI. Zet de font gelijkt aan het correcte font en krijgt ook gelijk de goeie kleur en lettergrootte.
+void Game::initGUI()
+{
+	//Load font
+	if (!this->font.loadFromFile("Fonts/PixellettersFull.ttf"))
+		std::cout << "ERROR::GAME::Failed to load font" << "\n";
+
+	//point text
+	this->pointText.setFont(this->font);
+	this->pointText.setCharacterSize(12);
+	this->pointText.setFillColor(sf::Color::White);
+	this->pointText.setString("test");
+	std::cout << "huts" << "\n";
+}
+
+//maakt de speler aan
+void Game::initPlayer()
+{
+	this->player = new Player();
+}
+
+//spawntimer goeroe dingen
+void Game::initEnemies()
+{
+	this->spawnTimerMax = 100.f;
+	this->spawnTimer = this->spawnTimerMax;
+}
+
+//Constuctor/Destrucor
+Game::Game()
+{
+	this->initWindow();
+	this->initTextures();
+	this->initGUI();
+	this->initPlayer();
+}
+
+//alles wordt gethanos snapped.
 Game::~Game()
 {
+	delete this->window;
+	delete this->player;
+
+	//Delete textures
+	for (auto& i : this->textures)
+	{
+		delete i.second;
+	}
+}
+
+//Functions
+//zorgt ervoor dat als de game open staat, alles geupdate wordt.
+void Game::run()
+{
+	while (this->window->isOpen())
+	{
+		this->update();
+		this->render();
+	}
+}
+
+//kijkt of er keys ingedrukt worden om bijvoorbeeld de game te sluiten.
+void Game::updatePollEvents()
+{
+	sf::Event e;
+	while (this->window->pollEvent(e))
+	{
+		if (e.Event::type == sf::Event::Closed)
+			this->window->close();
+		if (e.Event::KeyPressed && e.Event::key.code == sf::Keyboard::Escape)
+			this->window->close();
+	}
+}
+
+//checked of de speler input geeft, zo ja dan beweegt de speler. Hierdoor wordt er vanuit de andere classes ook de sprites geupdate.
+void Game::updateInput()
+{
+	//Move player
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		this->player->move(-1.f, 0.f);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		this->player->move(1.f, 0.f);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		this->player->move(0.f, -1.f);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		this->player->move(0.f, 1.f);
+}
+
+//leeg lmao. 
+void Game::updateGUI()
+{
 
 }
 
-void Game::FindTexture(sf::Texture* aTexture, std::string filePath)
+
+//alle update fucnties worden hier gerund
+void Game::update()
 {
-    if (!(*aTexture).loadFromFile(filePath)) {
-        EXIT_FAILURE;
-        window->close();
-    }
-    else {
-        //std::cout << "Texture succesfully loaded." << std::endl;
-    }
+	this->updatePollEvents();
+
+	this->updateInput();
+
+	this->player->update();
+
+	this->updateGUI();
 }
 
-void Game::CheckQuitInput(sf::Event* anEvent)
+//drawed de GUI
+void Game::renderGUI()
 {
-    if (anEvent->type == sf::Event::Closed) {
-        window->close();
-    }
-
-    //Press 'Shift + Escape' to Quit
-    if (anEvent->KeyPressed && anEvent->key.shift && anEvent->key.code == sf::Keyboard::Escape) {
-        window->close();
-    }
+	this->window->draw(this->pointText);
 }
 
-void Game::Update()
+//drawed alle leuke vormen en dingen.
+void Game::render()
 {
-    //Update Object Properties
-}
+	this->window->clear();
 
-void Game::Draw()
-{
-    //Draw Objects Here
-    //window->draw();
+	this->player->render(*this->window);
+
+	this->renderGUI();
+
+	this->window->display();
 }
