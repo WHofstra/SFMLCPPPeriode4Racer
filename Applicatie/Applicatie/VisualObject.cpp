@@ -13,12 +13,12 @@ VisualObject::~VisualObject()
 
 void VisualObject::SetPosition(sf::Vector2f sPosition)
 {
-
+	position = sPosition;
 }
 
 void VisualObject::SetSpeed(float aSpeed)
 {
-
+	movementSpeed = aSpeed;
 }
 
 void VisualObject::Update()
