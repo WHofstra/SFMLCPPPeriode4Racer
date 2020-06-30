@@ -3,11 +3,11 @@
 
 class Background : VisualObject
 {
+	private:
+
+
 	public:
 		Background();
 		~Background();
-
-	private:
-
 };
 

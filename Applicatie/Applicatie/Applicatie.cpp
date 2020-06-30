@@ -7,7 +7,7 @@ int main()
 	//als dit niet weinig in C is, dan weet ik het ook niet meer :D
 	Game game;
 
-	game.run();
+	game.Run();
 
 	//End of application
 	return 0;

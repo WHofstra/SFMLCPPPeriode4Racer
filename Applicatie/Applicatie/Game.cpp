@@ -1,144 +1,153 @@
 #include "Game.h"
 
 //Private functions
-//maakt de window aan en zet fps limit. ps en een leuk naampie
-void Game::initWindow()
+//Maakt de window aan en zet fps limit. ps en een leuk naampie
+void Game::InitWindow()
 {
-	this->window = new sf::RenderWindow(sf::VideoMode(1364, 664), "Huts game: Shiet Shiet", sf::Style::Close | sf::Style::Titlebar);
-	this->window->setFramerateLimit(144);
-	this->window->setVerticalSyncEnabled(false);
+	window = new sf::RenderWindow(sf::VideoMode(1364, 664), "Huts game: Shiet Shiet", sf::Style::Close | sf::Style::Titlebar);
+	window->setFramerateLimit(144);
+	window->setVerticalSyncEnabled(false);
 }
 
-
-
-
-//voegt een leuke texture toe aan de bullets
-void Game::initTextures()
+//Voegt een leuke texture toe aan de bullets
+void Game::InitTexture(sf::Texture* aTexture, std::string filePath)
 {
-
+	if (!(*aTexture).loadFromFile(filePath)) {
+		window->close();
+	}
 }
 
-//instantieert de GUI. Zet de font gelijkt aan het correcte font en krijgt ook gelijk de goeie kleur en lettergrootte.
-void Game::initGUI()
+//Instantieert de GUI. Zet de font gelijk aan het correcte font en krijgt ook gelijk de goeie kleur en lettergrootte.
+void Game::InitGUI(std::string filePath)
 {
 	//Load font
-	if (!this->font.loadFromFile("Fonts/PixellettersFull.ttf"))
-		std::cout << "ERROR::GAME::Failed to load font" << "\n";
+	//if (!font.loadFromFile("Fonts/PixellettersFull.ttf"))
+	//	std::cout << "ERROR::GAME::Failed to load font" << "\n";
 
-	//point text
-	this->pointText.setFont(this->font);
-	this->pointText.setCharacterSize(12);
-	this->pointText.setFillColor(sf::Color::White);
-	this->pointText.setString("test");
+	//Er is geen font in de Repository gestopt.
+	//Ik gebruik er zelf wel één.
+	if (!font.loadFromFile(filePath)) {
+		window->close();
+	}
+
+	//Point text
+	pointText.setFont(font);
+	pointText.setCharacterSize(32);
+	pointText.setFillColor(sf::Color::White);
+	pointText.setString("test");
 	std::cout << "huts" << "\n";
 }
 
-//maakt de speler aan
-void Game::initPlayer()
+//Maakt de speler aan
+void Game::InitPlayer()
 {
-	this->player = new Player();
+	player = new Player(sf::Vector2f(0.f, 0.f), &spriteSheet, sf::IntRect(0, 0, 848, 1200), 5.f,
+		                sf::FloatRect(0.f, 0.f, 0.f, 0.f));
 }
 
-//spawntimer goeroe dingen
-void Game::initEnemies()
+//Spawntimer goeroe dingen
+void Game::InitEnemies()
 {
-	this->spawnTimerMax = 100.f;
-	this->spawnTimer = this->spawnTimerMax;
+	spawnTimerMax = 100.f;
+	spawnTimer = spawnTimerMax;
 }
 
 //Constuctor/Destrucor
 Game::Game()
 {
-	this->initWindow();
-	this->initTextures();
-	this->initGUI();
-	this->initPlayer();
+	InitWindow();
+	InitTexture(&spriteSheet, "Textures/car.png");
+	InitGUI("Fonts/retganon.ttf");
+	InitPlayer();
 }
 
-//alles wordt gethanos snapped.
+//Alles wordt gethanos snapped.
 Game::~Game()
 {
-	delete this->window;
-	delete this->player;
+	delete window;
+	delete player;
 
 	//Delete textures
-	for (auto& i : this->textures)
+	for (auto& i : textures)
 	{
 		delete i.second;
 	}
 }
 
 //Functions
-//zorgt ervoor dat als de game open staat, alles geupdate wordt.
-void Game::run()
+//Zorgt ervoor dat als de game open staat, alles geUpdate wordt.
+void Game::Run()
 {
-	while (this->window->isOpen())
+	while (window->isOpen())
 	{
-		this->update();
-		this->render();
+		Update();
+		Render();
 	}
 }
 
-//kijkt of er keys ingedrukt worden om bijvoorbeeld de game te sluiten.
-void Game::updatePollEvents()
+//Kijkt of er keys ingedrukt worden om bijvoorbeeld de game te sluiten.
+void Game::UpdatePollEvents()
 {
 	sf::Event e;
-	while (this->window->pollEvent(e))
+	while (window->pollEvent(e))
 	{
 		if (e.Event::type == sf::Event::Closed)
-			this->window->close();
+			window->close();
+
+		//Druk 'Escape' om af te sluiten
 		if (e.Event::KeyPressed && e.Event::key.code == sf::Keyboard::Escape)
-			this->window->close();
+			window->close();
 	}
 }
 
-//checked of de speler input geeft, zo ja dan beweegt de speler. Hierdoor wordt er vanuit de andere classes ook de sprites geupdate.
-void Game::updateInput()
+//Checked of de speler input geeft, zo ja dan beweegt de speler.
+//Hierdoor wordt er vanuit de andere classes ook de sprites geupdate.S
+void Game::UpdateInput()
 {
 	//Move player
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		this->player->move(-1.f, 0.f);
+		player->move(-1.f, 0.f);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		this->player->move(1.f, 0.f);
+		player->move(1.f, 0.f);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		this->player->move(0.f, -1.f);
+		player->move(0.f, -1.f);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		this->player->move(0.f, 1.f);
+		player->move(0.f, 1.f);
 }
 
-//leeg lmao. 
-void Game::updateGUI()
+//Leeg lmao. 
+void Game::UpdateGUI()
 {
 
 }
 
-
-//alle update fucnties worden hier gerund
-void Game::update()
+//Alle update fucnties worden hier gerund
+void Game::Update()
 {
-	this->updatePollEvents();
+	UpdatePollEvents();
 
-	this->updateInput();
+	UpdateInput();
 
-	this->player->update();
+	player->Update();
 
-	this->updateGUI();
+	UpdateGUI();
 }
 
-//drawed de GUI
-void Game::renderGUI()
+//Drawed de GUI
+void Game::RenderGUI()
 {
-	this->window->draw(this->pointText);
+	window->draw(pointText);
 }
 
-//drawed alle leuke vormen en dingen.
-void Game::render()
+//Drawed alle leuke vormen en dingen.
+void Game::Render()
 {
-	this->window->clear();
+	
+	window->clear();
 
-	this->player->render(*this->window);
+	player->Render(*window);
 
-	this->renderGUI();
+	RenderGUI();
 
-	this->window->display();
+	window->display();
 }

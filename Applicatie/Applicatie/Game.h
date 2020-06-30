@@ -15,6 +15,8 @@ private:
 	//GUI
 	sf::Font font;
 	sf::Text pointText;
+	sf::Texture mapTexture;
+	sf::Texture spriteSheet;
 
 	//Player
 	Player* player;
@@ -24,26 +26,26 @@ private:
 	float spawnTimerMax;
 
 	//Private functions
-	void initWindow();
-	void initTextures();
-	void initGUI();
+	void InitWindow();
+	void InitTexture(sf::Texture* aTexture, std::string filePath);
+	void InitGUI(std::string filePath);
 
-	void initPlayer();
-	void initEnemies();
+	void InitPlayer();
+	void InitEnemies();
 
 public:
 	Game();
 	virtual ~Game();
 
 	//Functions
-	void run();
+	void Run();
 
-	//de reden dat er zoveel update zijn is, omdat er anders een hele grootte onoverzichtelijke spagetti onstaat.
-	void updatePollEvents();
-	void updateInput();
-	void updateGUI();
-	void update();
-	void renderGUI();
-	void render();
+	//de reden dat er zoveel Update zijn is, omdat er anders een hele grootte onoverzichtelijke spagetti onstaat.
+	void UpdatePollEvents();
+	void UpdateInput();
+	void UpdateGUI();
+	void Update();
+	void RenderGUI();
+	void Render();
 };
 

@@ -1,40 +1,42 @@
 #include "Player.h"
 
-//zet de variable
-void Player::initVariables()
+//Zet de variable
+void Player::InitVariables()
 {
-	this->movementSpeed = 5.f;
-
-	this->attackCooldownMax = 10.f;
-	this->attackCooldown = this->attackCooldownMax;
+	attackCooldownMax = 10.f;
+	attackCooldown = attackCooldownMax;
 }
 
-//checked of de texture correct is
-void Player::initTexture()
+//Checked of de texture correct is
+void Player::InitTexture()
 {
-	//laad de texture vanaf file
-	if (!this->texture.loadFromFile("Textures/car.png"))
+	//Laad de texture vanaf file
+	if (!(*texture).loadFromFile("Textures/car.png"))
 	{
-		std::cout << "ERROR::PLAYER::INITTEXTURE::Could not load texture file." << "\n";
+		std::cout << "ERROR::PLAYER::InitTEXTURE::Could not load texture file." << "\n";
 	}
+
+	//Eén gehele texture wordt al in de 'Game'-class geladen.
+	//Andere classes kunnen dan van deze texture hun sprites halen.
 }
 
-//zet de sprite gelijk aan de inhoud van de texture, en bepaald de scale
-void Player::initSprite()
+//Zet de sprite gelijk aan de inhoud van de texture, en bepaald de scale
+void Player::InitSprite()
 {
-	//zet de sprite gelijk aan de inhoud van de texture
-	this->sprite.setTexture(this->texture);
+	//Zet de sprite gelijk aan de inhoud van de texture
+	sprite.setTexture(*texture);
 
 	//Resized de sprite
-	this->sprite.scale(0.1f, 0.1f);
+	sprite.scale(0.1f, 0.1f);
 }
 
-//roept de functies aan, zodra de speler wordt aangemaakt
-Player::Player()
+//Roept de functies aan, zodra de speler wordt aangemaakt
+Player::Player(sf::Vector2f aPosition, sf::Texture* aTexture, sf::IntRect spriteBounds, float aSpeed, sf::FloatRect objectBounds)
+	: CollisionObject(aPosition, aTexture, spriteBounds, aSpeed, objectBounds)
 {
-	this->initVariables();
-	this->initTexture();
-	this->initSprite();
+	InitVariables();
+	//InitTexture();
+	InitSprite();
 }
 
 Player::~Player()
@@ -42,33 +44,33 @@ Player::~Player()
 
 }
 
-//geeft de positie van de speler terug
-const sf::Vector2f& Player::getPos() const
+//Geeft de positie van de speler terug
+const sf::Vector2f& Player::GetPos() const
 {
-	return this->sprite.getPosition();
+	return sprite.getPosition();
 }
 
-//geeft de bouds/collider van de speler terug
-const sf::FloatRect Player::getBounds() const
+//Geeft de bouds/collider van de speler terug
+const sf::FloatRect Player::GetBounds() const
 {
-	return this->sprite.getGlobalBounds();
+	return sprite.getGlobalBounds();
 }
 
-//beweegt de sprite als er imput is
+//Beweegt de sprite als er imput is
 void Player::move(const float dirX, const float dirY)
 {
-	this->sprite.move(this->movementSpeed * dirX, this->movementSpeed * dirY);
+	sprite.move(movementSpeed * dirX, movementSpeed * dirY);
 }
 
 
-//update de cooldown
-void Player::update()
+//Update de cooldown
+void Player::Update()
 {
 
 }
 
-//tekent de sprite van de speler op de correcte positie
-void Player::render(sf::RenderTarget& target)
+//Tekent de sprite van de speler op de correcte positie
+void Player::Render(sf::RenderTarget& target)
 {
-	target.draw(this->sprite);
+	target.draw(sprite);
 }

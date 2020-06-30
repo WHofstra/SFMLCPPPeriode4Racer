@@ -1,37 +1,32 @@
 #pragma once
-
-#include<SFML/Graphics.hpp>
 #include<SFML/System.hpp>
 #include<iostream>
 
-class Player
+#include "CollisionObject.h"
+
+class Player : public CollisionObject
 {
 private:
-	//texture wordt in sprite gestopt
-	sf::Sprite sprite;
-	sf::Texture texture;
-
-	float movementSpeed;
-
 	float attackCooldown;
 	float attackCooldownMax;
 
 	//Private functions
-	void initVariables();
-	void initTexture();
-	void initSprite();
+	void InitVariables();
+	void InitTexture();
+	void InitSprite();
 
 public:
-	Player();
+	Player(sf::Vector2f aPosition, sf::Texture* aTexture, sf::IntRect spriteBounds, float aSpeed,
+		   sf::FloatRect objectBounds);
 	virtual ~Player();
 
 	//position via pointer en collider via bounds
-	const sf::Vector2f& getPos() const;
-	const sf::FloatRect getBounds() const;
+	const sf::Vector2f& GetPos() const;
+	const sf::FloatRect GetBounds() const;
 
 	//Functions
 	void move(const float dirX, const float dirY);
-	void update();
-	void render(sf::RenderTarget& target);
+	void Update();
+	void Render(sf::RenderTarget& target);
 };
 
